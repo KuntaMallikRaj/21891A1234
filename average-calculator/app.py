@@ -40,23 +40,23 @@ async def get_numbers(number_id: str):
     data = await fetch_data(url)
 
     if data is not None:
-        values = data['numbers']
+        values = set(data['numbers'])
         global window, window_size
-        initial_window = window[:]
+        prev_window = window[:]
 
         window.extend(values)
         window = window[-window_size:]
         average = sum(window) / len(window) if window else 0
 
         return JSONResponse({
-            "initial_window": initial_window,
+            "prev_window": prev_window,
             "current_window": window,
             "average": average
         })
 
     average = sum(window) / len(window) if window else 0
     return JSONResponse({
-        "initial_window": window,
+        "prev_window": window,
         "current_window": window,
-        "average": average 
+        "average": average
     })
